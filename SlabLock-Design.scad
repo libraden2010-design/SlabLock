@@ -58,14 +58,14 @@ sheet_t       = 0.8;
 sheet_clear   = 0.25;
 back_plate_t  = 2.8;         // tuck tongue height (matches frame groove)
 lid_t         = 5.3;         // total thickness — matches frame channel
-lip_t         = 0.4;         // retaining lip on mating face (holds sheet in)
+rabbet_depth  = 1.0;         // shallow recess for sheet (frame traps it)
 capture       = 3.0;         // sheet overlap past window edge
 thumb_notch_r = 8;
 
 // ---- [V4] Slide-lock geometry ----
 rail_w    = 2.0;    // rail footprint on top of each side wall
 rail_h    = 2.0;    // dovetail height (45-degree faces)
-slide_clr = 0.25;   // sliding clearance per side
+slide_clr = 0.40;   // sliding clearance per side (0.25 was too tight for FDM)
 // Full-height channel: the whole lid nests inside the frame rim, which
 // stands 0.6 proud of the lid face — that proud rim doubles as the
 // stacking key (nests into the back recess of the case above)
@@ -316,25 +316,9 @@ module lid() {
             linear_extrude(lid_t + 0.2)
                 rrect(open_w, open_h, 2);
 
-        // Sheet grooves behind retaining lip — C-channel (left, right, bottom).
-        // Each groove is only ~3.25mm wide so the slicer bridges them easily.
-        // The lip (0.4mm at z=0) keeps the sheet from falling out.
-        groove_h = sheet_t + sheet_clear;
-        groove_w = capture + sheet_clear;
-
-        // Left edge groove
-        translate([-rabbet_w/2, rabbet_bot, lip_t])
-            cube([groove_w, rabbet_top - rabbet_bot, groove_h + 0.05]);
-        // Right edge groove
-        translate([rabbet_w/2 - groove_w, rabbet_bot, lip_t])
-            cube([groove_w, rabbet_top - rabbet_bot, groove_h + 0.05]);
-        // Bottom edge groove
-        translate([-rabbet_w/2, rabbet_bot, lip_t])
-            cube([rabbet_w, groove_w, groove_h + 0.05]);
-
-        // Entry slot at top — remove lip so sheet slides in from above
-        translate([-rabbet_w/2, lid_y1 - 1, -0.05])
-            cube([rabbet_w, 5, lip_t + groove_h + 0.1]);
+        // Shallow rabbet on mating face — sheet sits here, frame traps it
+        translate([-rabbet_w/2, rabbet_bot, -0.05])
+            cube([rabbet_w, rabbet_top - rabbet_bot, rabbet_depth + 0.05]);
 
         // Detent divots in mating face (over the frame's ledge bumps)
         for (sx = [-1, 1])
