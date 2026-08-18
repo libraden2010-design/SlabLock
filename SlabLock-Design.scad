@@ -125,7 +125,7 @@ sheet_w = rabbet_w - 2*sheet_clear;
 sheet_h = lid_y1 - rabbet_bot - 1;
 
 // Detent positions
-det_y  = rabbet_bot - 0.9;               // in the bottom band of the lid
+det_y  = lid_yc;                          // centered vertically on the lid
 det_x  = (pocket_w/2 + chan_base_hw)/2;   // centered on the side ledges (41.7)
 
 // Side magnet height: centered in the frame body (not the channel area)
